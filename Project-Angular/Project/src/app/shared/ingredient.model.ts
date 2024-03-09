@@ -1,3 +1,3 @@
-export class ingredients { 
+export class Ingredient { 
     constructor(public name: string, public amount: number){}
 }
