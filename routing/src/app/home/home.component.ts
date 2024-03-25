@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -9,21 +10,21 @@ import { AuthService } from '../auth.service';
 })
 export class HomeComponent implements OnInit {
 
-
-  constructor(private router: Router,private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
   }
 
-  onLoadServers(id: number){
-    this.router.navigate(['/servers',id,'edit'], {queryParams: {allowEdit: '1'}, fragment: 'loading'});
+  onLoadServer(id: number) {
+    // complex calculation
+    this.router.navigate(['/servers', id, 'edit'], {queryParams: {allowEdit: '1'}, fragment: 'loading'});
   }
 
-  onLogin(){
+  onLogin() {
     this.authService.login();
   }
 
-  onLogout(){
+  onLogout() {
     this.authService.logout();
   }
 }
