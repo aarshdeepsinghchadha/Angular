@@ -1,5 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { DAtaStorageService } from "../shared/data-storage.service";
+import { AuthService } from "../auth/auth.service";
+import { Subscribable, Subscription } from "rxjs";
 
 @Component({
     'selector':'app-header',
@@ -7,13 +9,22 @@ import { DAtaStorageService } from "../shared/data-storage.service";
 })
 
 
-export class HeaderComponent{
+export class HeaderComponent implements OnInit, OnDestroy{
+    isAuthenticated = false;
+    private userSub: Subscription;
     // @Output() featureSelected = new EventEmitter<string>();
 
     // onSelect(feature: string){
     //     this.featureSelected.emit(feature);
     // }
-    constructor(private dataStorageService: DAtaStorageService){}
+    constructor(private dataStorageService: DAtaStorageService, private authService: AuthService){}
+
+   
+    ngOnInit(){
+        this.userSub = this.authService.user.subscribe(user  => {
+            this.isAuthenticated = !user ? false : true;
+        });
+    }
 
     onSaveData(){
         this.dataStorageService.storeRecipes();
@@ -22,4 +33,13 @@ export class HeaderComponent{
     onFetchData(){
         this.dataStorageService.fetchRecipes().subscribe();
     }
+
+    onLogout(){
+        this.authService.logout();
+    }
+
+    ngOnDestroy() {
+        this.userSub.unsubscribe();
+    }
+
 }
